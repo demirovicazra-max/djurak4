@@ -1,0 +1,873 @@
+
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Djur – NO åk 4</title>
+<style>
+:root {
+  --navy:#183653;
+  --blue:#28649a;
+  --pale:#edf5fa;
+  --green:#286b52;
+  --lightgreen:#eaf5ee;
+  --yellow:#fff5d9;
+  --red:#a83d3d;
+  --ink:#263746;
+  --muted:#586b7b;
+  --white:#fff;
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  background:#f3f6f8;
+  color:var(--ink);
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:18px;
+  line-height:1.65;
+}
+button {font:inherit;cursor:pointer}
+header {
+  background:var(--navy);
+  color:white;
+  padding:26px 22px;
+}
+.header-inner {max-width:1050px;margin:auto}
+header h1 {font-size:34px;margin:0}
+header p {margin:5px 0 0;color:#e0edf7}
+main {max-width:1050px;margin:25px auto;padding:0 18px 60px}
+.panel {
+  background:white;
+  border-radius:16px;
+  padding:24px;
+  margin-bottom:20px;
+  box-shadow:0 2px 9px #19365310;
+}
+h2 {color:var(--navy);font-size:27px;margin:0 0 12px}
+h3 {color:var(--blue);font-size:21px}
+p {margin:10px 0}
+.small {font-size:15px;color:var(--muted)}
+.navigation {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+  gap:10px;
+  margin-bottom:22px;
+}
+.navbtn {
+  background:white;
+  border:2px solid #d7e3ed;
+  color:var(--navy);
+  border-radius:12px;
+  padding:13px 10px;
+  font-weight:bold;
+  min-height:65px;
+}
+.navbtn.active {background:var(--navy);color:white}
+button:focus-visible {
+  outline:4px solid #e0a92b;
+  outline-offset:3px;
+}
+.action {
+  background:var(--blue);
+  color:white;
+  border:0;
+  border-radius:10px;
+  padding:12px 20px;
+  margin:5px 4px 5px 0;
+  font-weight:bold;
+}
+.action.secondary {background:#e9f0f5;color:var(--navy)}
+.action.green {background:var(--green)}
+.action:disabled {opacity:.45;cursor:not-allowed}
+.read-controls {
+  background:var(--pale);
+  border-radius:12px;
+  padding:13px;
+  margin:15px 0;
+}
+.read-controls button {min-width:90px}
+.progress {
+  background:#dce6ed;
+  height:12px;
+  border-radius:20px;
+  overflow:hidden;
+  margin:10px 0;
+}
+.progress div {
+  height:100%;
+  background:var(--green);
+  width:0%;
+  transition:width .2s;
+}
+.visual {
+  border:2px solid #dce7ef;
+  background:#f8fbfd;
+  border-radius:14px;
+  padding:18px;
+  margin:15px 0;
+}
+.visual-title {font-weight:bold;color:var(--navy)}
+.diagram {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:12px;
+  margin:15px 0;
+}
+.diagram-box {
+  min-width:110px;
+  text-align:center;
+  padding:13px;
+  border:2px solid #9bb8ce;
+  border-radius:12px;
+  background:white;
+  font-weight:bold;
+}
+.diagram-box span {
+  display:block;
+  font-size:14px;
+  font-weight:normal;
+}
+.arrow {font-size:25px;color:var(--blue)}
+.fact {
+  border-left:5px solid var(--green);
+  background:var(--lightgreen);
+  padding:13px 17px;
+  margin:15px 0;
+  border-radius:7px;
+}
+.warning {
+  background:var(--yellow);
+  padding:13px 17px;
+  border-radius:9px;
+  margin:14px 0;
+}
+.word {
+  border-bottom:1px dotted var(--blue);
+  color:var(--blue);
+  font-weight:bold;
+  cursor:help;
+}
+.compare {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:13px;
+}
+.compare article {
+  border:2px solid #dce7ef;
+  border-radius:12px;
+  padding:15px;
+  background:white;
+}
+.compare article h3 {margin:0 0 8px}
+.stage {
+  display:inline-block;
+  background:#e7f0f7;
+  color:var(--navy);
+  padding:5px 12px;
+  border-radius:20px;
+  font-size:14px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+.question {
+  background:#f7fafc;
+  padding:19px;
+  border-radius:13px;
+  margin:15px 0;
+  border:1px solid #dce7ef;
+}
+.option {
+  display:block;
+  width:100%;
+  text-align:left;
+  background:white;
+  border:2px solid #d5e1eb;
+  border-radius:10px;
+  padding:13px 15px;
+  margin:9px 0;
+  color:var(--ink);
+}
+.option:hover:not(:disabled) {border-color:var(--blue)}
+.option.correct {background:#e7f5eb;border-color:var(--green)}
+.option.wrong {background:#fff0ed;border-color:var(--red)}
+.feedback {
+  padding:13px;
+  border-radius:9px;
+  margin-top:12px;
+  display:none;
+}
+.feedback.show {display:block}
+#lesson {min-height:300px}
+#completion {display:none}
+footer {
+  text-align:center;
+  padding:25px;
+  color:var(--muted);
+  font-size:14px;
+}
+@media(max-width:600px) {
+  body {font-size:17px}
+  header h1 {font-size:27px}
+  .panel {padding:17px}
+  h2 {font-size:23px}
+}
+@media(prefers-reduced-motion:reduce) {
+  * {scroll-behavior:auto!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <h1>Djur – upptäck och förstå</h1>
+    <p>NO · Årskurs 4 · Lär dig steg för steg</p>
+  </div>
+</header>
+
+<main>
+<section class="panel">
+  <h2>Välkommen till djurens värld!</h2>
+  <p>
+    Det finns många olika djur på jorden.
+    En del djur är mycket lika varandra.
+    Andra ser helt olika ut.
+  </p>
+  <p>
+    Du ska undersöka hur djur ser ut, hur de lever
+    och hur forskare sorterar dem i grupper.
+  </p>
+  <div class="fact">
+    <strong>Ditt uppdrag:</strong>
+    Lär dig känna igen djurgrupperna och förstå
+    vad som skiljer dem åt.
+  </div>
+  <p class="small">
+    Du kan lyssna på texten, pausa när du vill
+    och träna på frågorna flera gånger.
+  </p>
+  <div class="progress"><div id="totalProgress"></div></div>
+  <p id="progressText" class="small">0 av 9 områden tränade</p>
+</section>
+
+<nav class="navigation" id="navigation" aria-label="Djurens områden"></nav>
+
+<section class="panel" id="lesson">
+  <span class="stage" id="stageLabel">UPPTÄCK</span>
+  <h2 id="lessonTitle"></h2>
+
+  <div class="read-controls">
+    <strong>Lyssna på texten</strong><br>
+    <button class="action" onclick="speak()">Lyssna</button>
+    <button class="action secondary" onclick="pauseSpeech()">Pausa</button>
+    <button class="action secondary" onclick="resumeSpeech()">Fortsätt</button>
+    <button class="action secondary" onclick="stopSpeech()">Stoppa</button>
+  </div>
+
+  <div id="lessonContent"></div>
+  <div style="margin-top:20px">
+    <button class="action green" onclick="startQuiz()">Träna på frågor</button>
+    <button class="action secondary" onclick="nextLesson()">Nästa område</button>
+  </div>
+</section>
+
+<section class="panel" id="quizPanel" style="display:none">
+  <span class="stage">KONTROLLERA DIN KUNSKAP</span>
+  <h2 id="quizTitle">Vad har du lärt dig?</h2>
+  <div class="progress"><div id="quizProgress"></div></div>
+  <p id="questionCount" class="small"></p>
+  <div id="questionArea"></div>
+  <button class="action secondary" onclick="closeQuiz()">Tillbaka till lektionen</button>
+</section>
+
+<section class="panel" id="completion">
+  <h2>Du har tränat färdigt!</h2>
+  <p id="resultText"></p>
+  <div class="fact" id="resultFeedback"></div>
+  <button class="action green" onclick="retryQuiz()">Träna igen</button>
+  <button class="action" onclick="nextLesson()">Nästa område</button>
+</section>
+
+<section class="panel">
+  <h2>Viktiga NO-begrepp</h2>
+  <p>Klicka på ett begrepp för att läsa förklaringen.</p>
+  <div id="dictionary"></div>
+</section>
+</main>
+
+<footer>
+  Djur – interaktivt NO-läromedel · Årskurs 4
+</footer>
+
+<script>
+const lessons = [
+{
+title:"1. Hur sorterar vi djur?",
+stage:"UPPTÄCK",
+content:`
+<h3>Alla djur tillhör djurriket</h3>
+<p>
+Biologer och forskare sorterar djur i olika grupper.
+Det gör det lättare att förstå vilka djur som liknar
+varandra och hur de är släkt.
+</p>
+<div class="visual">
+<div class="visual-title">Två stora grupper</div>
+<div class="diagram">
+<div class="diagram-box">Ryggradsdjur<span>Har ryggrad</span></div>
+<div class="diagram-box">Ryggradslösa djur<span>Saknar ryggrad</span></div>
+</div>
+</div>
+<h3>Vad är skillnaden?</h3>
+<div class="compare">
+<article>
+<h3>Ryggradsdjur</h3>
+<p>Har ett skelett inuti kroppen. Ryggraden är en del av skelettet.</p>
+<p>Exempel: fiskar, fåglar och däggdjur.</p>
+</article>
+<article>
+<h3>Ryggradslösa djur</h3>
+<p>Saknar ryggrad. Vissa har ett hårt yttre skal. Andra har en mjuk kropp.</p>
+<p>Exempel: insekter, spindlar och maskar.</p>
+</article>
+</div>
+<div class="fact">
+Ett skal på utsidan och ett skelett på insidan
+är två olika sätt att få stöd och skydd.
+</div>
+<h3>Jämför och upptäck</h3>
+<p>En människa har ryggrad. En skalbagge har ett yttre skal men ingen ryggrad.</p>
+<p>Det viktiga är inte hur stora djuren är, utan hur deras kroppar är byggda.</p>
+`,
+questions:[
+["Vilken grupp har en ryggrad?",["Ryggradsdjur","Insekter","Maskar"],0,"Ryggradsdjur har ett skelett inuti kroppen och en ryggrad."],
+["Vad saknar ryggradslösa djur?",["Vingar","Ryggrad","Alla muskler"],1,"Ryggradslösa djur saknar ryggrad. En del har ett yttre skal."],
+["Vilket djur är ett ryggradsdjur?",["Daggmask","Spindel","Fisk"],2,"Fiskar har ett skelett och en ryggrad."]
+]
+},
+{
+title:"2. Maskar – ringmaskar och andra maskar",
+stage:"JÄMFÖR",
+content:`
+<h3>Maskar har en långsmal kropp</h3>
+<p>
+Maskar saknar ben. Det finns olika grupper av maskar:
+ringmaskar, plattmaskar och rundmaskar.
+</p>
+<div class="visual">
+<div class="visual-title">Tre grupper av maskar</div>
+<div class="compare">
+<article><h3>Ringmask</h3><p>Kroppen är indelad i många ringliknande delar.</p></article>
+<article><h3>Plattmask</h3><p>Kroppen är tillplattad.</p></article>
+<article><h3>Rundmask</h3><p>Kroppen är rund och långsmal.</p></article>
+</div>
+</div>
+<h3>Daggmasken</h3>
+<p>Daggmasken är en ringmask som lever i jorden.</p>
+<p>Den har muskler som hjälper den att röra sig. Den har inget skelett och inga ben.</p>
+<p>Daggmasken andas genom huden. Huden måste vara fuktig.</p>
+<div class="fact">
+Daggmasken är viktig för jorden. När den gräver gångar
+blir jorden luftigare. Den äter jord och växtdelar.
+Dess avföring innehåller näring som växter kan använda.
+</div>
+<h3>Så fungerar daggmaskens liv</h3>
+<div class="diagram">
+<div class="diagram-box">Ägg<span>Utveckling börjar</span></div>
+<div class="arrow">→</div>
+<div class="diagram-box">Ung mask<span>Växer</span></div>
+<div class="arrow">→</div>
+<div class="diagram-box">Vuxen mask<span>Kan fortplanta sig</span></div>
+</div>
+<p>En daggmask är hermafrodit. Det betyder att den har både hanliga och honliga könsorgan.</p>
+`,
+questions:[
+["Hur andas daggmasken?",["Genom huden","Med gälar","Med fjädrar"],0,"Daggmasken tar upp syre genom sin fuktiga hud."],
+["Vilken grupp tillhör daggmasken?",["Spindeldjur","Ringmaskar","Fiskar"],1,"Daggmasken är en ringmask."],
+["Varför är daggmasken bra för jorden?",["Den äter alla växter","Den gör jorden luftigare","Den gör jorden torr"],1,"Daggmaskens gångar gör jorden luftigare och hjälper vatten att tränga ner."]
+]
+},
+{
+title:"3. Insekter",
+stage:"URSKILJ",
+content:`
+<h3>Insekter har en speciell kroppsbyggnad</h3>
+<p>
+Insekter är ryggradslösa djur. De har ett hårt yttre skal
+som skyddar kroppen.
+</p>
+<div class="visual">
+<div class="visual-title">Insektens tre kroppsdelar</div>
+<div class="diagram">
+<div class="diagram-box">Huvud<span>Ögon och antenner</span></div>
+<div class="arrow">→</div>
+<div class="diagram-box">Mellankropp<span>Ben och vingar</span></div>
+<div class="arrow">→</div>
+<div class="diagram-box">Bakkropp<span>Organ och andning</span></div>
+</div>
+</div>
+<div class="fact">
+En insekt har sex ben. Benen sitter på mellankroppen.
+Kroppen består av huvud, mellankropp och bakkropp.
+</div>
+<h3>Jämför: insekt och spindel</h3>
+<div class="compare">
+<article>
+<h3>Insekt</h3>
+<p>Sex ben.</p><p>Tre kroppsdelar.</p><p>Exempel: myra och fjäril.</p>
+</article>
+<article>
+<h3>Spindel</h3>
+<p>Åtta ben.</p><p>Två kroppsdelar.</p><p>Exempel: korsspindel.</p>
+</article>
+</div>
+<h3>Insekternas livscykel</h3>
+<p>Vissa insekter genomgår fullständig förvandling. Andra genomgår ofullständig förvandling.</p>
+<div class="visual">
+<strong>Fullständig förvandling – exempel fluga</strong>
+<div class="diagram">
+<div class="diagram-box">Ägg</div><div class="arrow">→</div>
+<div class="diagram-box">Larv</div><div class="arrow">→</div>
+<div class="diagram-box">Puppa</div><div class="arrow">→</div>
+<div class="diagram-box">Vuxen fluga</div>
+</div>
+<p>Larven ser inte ut som den vuxna flugan.</p>
+</div>
+<div class="visual">
+<strong>Ofullständig förvandling – exempel gräshoppa</strong>
+<div class="diagram">
+<div class="diagram-box">Ägg</div><div class="arrow">→</div>
+<div class="diagram-box">Nymf</div><div class="arrow">→</div>
+<div class="diagram-box">Vuxen gräshoppa</div>
+</div>
+<p>Nymfen liknar den vuxna gräshoppan men är mindre och inte färdigutvecklad.</p>
+</div>
+<h3>Varför är insekter viktiga?</h3>
+<p>Insekter är föda för många andra djur. En del insekter hjälper också till att bryta ner döda växter och djur.</p>
+`,
+questions:[
+["Hur många ben har en insekt?",["Fyra","Sex","Åtta"],1,"Insekter har sex ben."],
+["Vilka delar består insektens kropp av?",["Huvud, mellankropp och bakkropp","Huvud och svans","Fyra lika delar"],0,"Insekter har tre kroppsdelar."],
+["Vad händer vid fullständig förvandling?",["Larven blir direkt vuxen","Ägg, larv, puppa och vuxen insekt","Ägget blir en nymf"],1,"Vid fullständig förvandling finns ett larvstadium och ett puppstadium."]
+]
+},
+{
+title:"4. Spindeldjur",
+stage:"JÄMFÖR",
+content:`
+<h3>Spindlar är inte insekter</h3>
+<p>Spindlar tillhör gruppen spindeldjur. Alla spindlar är rovdjur.</p>
+<div class="visual">
+<div class="visual-title">Spindelns kroppsbyggnad</div>
+<div class="diagram">
+<div class="diagram-box">Framkropp<span>Ben och ögon</span></div>
+<div class="arrow">→</div>
+<div class="diagram-box">Bakkropp<span>Spinnkörtlar</span></div>
+</div>
+</div>
+<p>Spindlar har åtta ben och två kroppsdelar.</p>
+<div class="fact">
+Spindlar använder spindeltråd på flera sätt.
+De kan bygga nät, skydda ägg och fånga byten.
+</div>
+<h3>Jämför med insekter</h3>
+<div class="compare">
+<article><h3>Insekt</h3><p>6 ben</p><p>3 kroppsdelar</p></article>
+<article><h3>Spindel</h3><p>8 ben</p><p>2 kroppsdelar</p></article>
+</div>
+<p>Det är antalet ben och kroppsdelarna som hjälper oss att skilja grupperna åt.</p>
+`,
+questions:[
+["Hur många ben har en spindel?",["Sex","Åtta","Tio"],1,"Spindeldjur har åtta ben."],
+["Hur många kroppsdelar har en spindel?",["Två","Tre","Fyra"],0,"Spindelns kropp består av framkropp och bakkropp."],
+["Vad använder många spindlar spindeltråd till?",["Att bygga nät","Att andas","Att simma"],0,"Spindeltråd kan användas till nät och för att skydda äggen."]
+]
+},
+{
+title:"5. Fiskar",
+stage:"UPPTÄCK",
+content:`
+<h3>Fiskar lever i vatten</h3>
+<p>Fiskar är ryggradsdjur. De flesta fiskar har fenor, fjäll och gälar.</p>
+<div class="visual">
+<div class="visual-title">Fiskens viktiga kroppsdelar</div>
+<div class="compare">
+<article><h3>Gälar</h3><p>Gälarna tar upp syre ur vattnet.</p></article>
+<article><h3>Fenor</h3><p>Fenorna hjälper fisken att simma och styra.</p></article>
+<article><h3>Fjäll</h3><p>Fjällen skyddar fiskens kropp.</p></article>
+</div>
+</div>
+<div class="fact">
+Fiskar andas med gälar. De tar upp syre som finns löst i vattnet.
+Människor andas med lungor och behöver luft.
+</div>
+<h3>Så fortplantar sig många fiskar</h3>
+<p>Många fiskar lägger ägg i vattnet. Hos många arter sker befruktningen utanför honans kropp. Det kallas yttre befruktning.</p>
+<div class="diagram">
+<div class="diagram-box">Ägg</div><div class="arrow">→</div>
+<div class="diagram-box">Fiskyngel</div><div class="arrow">→</div>
+<div class="diagram-box">Vuxen fisk</div>
+</div>
+<p>Fiskar kan se olika ut. Formen på kroppen och fenorna kan hjälpa dem att leva på olika sätt i vatten.</p>
+`,
+questions:[
+["Vad använder fiskar för att andas?",["Lungor","Gälar","Hud"],1,"Gälarna tar upp syre ur vattnet."],
+["Vad hjälper fenorna fisken med?",["Att styra och simma","Att tugga","Att andas luft"],0,"Fenorna hjälper fisken att röra sig och styra i vattnet."],
+["Vad betyder yttre befruktning?",["Ägget befruktas utanför honan","Ägget befruktas i lungorna","Ungen föds levande"],0,"Yttre befruktning betyder att ägget befruktas utanför honans kropp."]
+]
+},
+{
+title:"6. Kräldjur",
+stage:"UPPTÄCK",
+content:`
+<h3>Kräldjur kallas också reptiler</h3>
+<p>Ormar, ödlor, sköldpaddor och krokodiler är kräldjur.</p>
+<p>Kräldjur är ryggradsdjur. De har torr hud med fjäll.</p>
+<div class="fact">
+De flesta kräldjur är växelvarma. Det betyder att
+kroppstemperaturen påverkas av temperaturen i omgivningen.
+Många söker sig därför till solen för att bli varma.
+</div>
+<h3>Så fungerar kroppen</h3>
+<div class="compare">
+<article><h3>Hud</h3><p>Torr hud med fjäll.</p></article>
+<article><h3>Andning</h3><p>Andas med lungor.</p></article>
+<article><h3>Fortplantning</h3><p>Många lägger ägg.</p></article>
+</div>
+<h3>Ormar i Sverige</h3>
+<p>I Sverige finns huggorm, snok och hasselsnok.</p>
+<p>Huggormen är giftig. Snoken har ofta ljusa fläckar i nacken. Huggormen har ofta ett mörkt sicksackmönster.</p>
+<div class="warning">
+Alla ormar ska lämnas i fred. Försök aldrig fånga eller hantera en orm.
+</div>
+<h3>Livscykel</h3>
+<div class="diagram">
+<div class="diagram-box">Ägg</div><div class="arrow">→</div>
+<div class="diagram-box">Unge</div><div class="arrow">→</div>
+<div class="diagram-box">Vuxet kräldjur</div>
+</div>
+`,
+questions:[
+["Vilket annat namn har kräldjur?",["Reptiler","Insekter","Ringmaskar"],0,"Kräldjur kallas också reptiler."],
+["Hur andas kräldjur?",["Med gälar","Med lungor","Genom fjädrarna"],1,"Kräldjur andas med lungor."],
+["Vad betyder växelvarm?",["Kroppstemperaturen påverkas av omgivningen","Djuret är alltid varmt","Djuret kan inte röra sig"],0,"Växelvarma djur påverkas av temperaturen runt omkring."]
+]
+},
+{
+title:"7. Fåglar",
+stage:"UPPTÄCK",
+content:`
+<h3>Fåglar har fjädrar</h3>
+<p>Fåglar är ryggradsdjur. Kroppen är täckt av fjädrar och de har en näbb.</p>
+<div class="compare">
+<article><h3>Fjädrar</h3><p>Skyddar mot vatten, värme och kyla.</p></article>
+<article><h3>Vingar</h3><p>Fåglarnas framben är ombildade till vingar.</p></article>
+<article><h3>Näbb</h3><p>Näbbens form kan visa vilken mat fågeln äter.</p></article>
+</div>
+<h3>Fågelns andning</h3>
+<p>Fåglar har lungor och luftsäckar. Luften passerar genom lungorna på ett effektivt sätt.</p>
+<h3>Fåglarnas livscykel</h3>
+<div class="diagram">
+<div class="diagram-box">Ägg</div><div class="arrow">→</div>
+<div class="diagram-box">Fågelunge</div><div class="arrow">→</div>
+<div class="diagram-box">Vuxen fågel</div>
+</div>
+<p>Fåglar lägger ägg. Äggen ruvas så att de hålls varma tills de kläcks.</p>
+<div class="fact">
+Fågelsång kan användas för att locka till sig en partner
+och för att varna andra fåglar eller försvara ett revir.
+</div>
+<h3>Vad är ett revir?</h3>
+<p>Ett revir är ett område som ett djur försvarar mot andra djur av samma art.</p>
+`,
+questions:[
+["Vad är speciellt med fåglarnas kropp?",["De har fjädrar","De har åtta ben","De har fjäll"],0,"Fjädrar är ett kännetecken för fåglar."],
+["Vad är ett revir?",["Ett område som ett djur försvarar","Ett slags ägg","En del av näbben"],0,"Ett revir är ett område som djuret försvarar."],
+["Varför har många fåglar olika sorters näbbar?",["Näbben passar olika sätt att äta","Näbben hjälper dem att andas","Alla näbbar är likadana"],0,"Näbbens form kan ge ledtrådar om vilken föda fågeln äter."]
+]
+},
+{
+title:"8. Däggdjur",
+stage:"UPPTÄCK",
+content:`
+<h3>Däggdjur ger sina ungar mjölk</h3>
+<p>Däggdjur är ryggradsdjur. De flesta har päls eller hår och andas med lungor.</p>
+<div class="compare">
+<article><h3>Människan</h3><p>Är ett däggdjur. Ungen får mjölk från mamman.</p></article>
+<article><h3>Hunden</h3><p>Är ett däggdjur. Har päls och lungor.</p></article>
+<article><h3>Valen</h3><p>Är ett däggdjur trots att den lever i vatten. Den måste upp till ytan för att andas.</p></article>
+</div>
+<div class="fact">
+Ett viktigt kännetecken för däggdjur är att ungarna får mjölk från mamman.
+Alla däggdjur andas med lungor.
+</div>
+<h3>Tre grupper av däggdjur</h3>
+<div class="compare">
+<article><h3>Kloakdjur</h3><p>Lägger ägg. Exempel: näbbdjur.</p></article>
+<article><h3>Pungdjur</h3><p>Ungarna föds mycket outvecklade och utvecklas vidare i mammans pung.</p></article>
+<article><h3>Moderkaksdjur</h3><p>Fostret får näring genom en moderkaka i mammans livmoder.</p></article>
+</div>
+<h3>Däggdjurens livscykel</h3>
+<div class="diagram">
+<div class="diagram-box">Befruktning</div><div class="arrow">→</div>
+<div class="diagram-box">Utveckling</div><div class="arrow">→</div>
+<div class="diagram-box">Unge</div><div class="arrow">→</div>
+<div class="diagram-box">Vuxen</div>
+</div>
+<p>Många däggdjur samarbetar och lever i flockar.</p>
+`,
+questions:[
+["Vad är ett viktigt kännetecken för däggdjur?",["De ger ungarna mjölk","De har alltid vingar","De har gälar"],0,"Däggdjurens ungar får mjölk från mamman."],
+["Hur andas valar och delfiner?",["Med gälar","Med lungor","Genom huden"],1,"Valar och delfiner är däggdjur. De måste upp till ytan för att andas."],
+["Var utvecklas pungdjurens ungar vidare?",["I en pung","I ett skal","I ett bo"],0,"Pungdjurens mycket outvecklade ungar fortsätter utvecklas i mammans pung."]
+]
+},
+{
+title:"9. Djur och människor – husdjur och landskapsdjur",
+stage:"KOMBINERA",
+content:`
+<h3>Sveriges landskapsdjur</h3>
+<p>
+Sveriges landskap har varsitt landskapsdjur.
+De olika djuren visar hur många sorters djur
+som finns i vårt land.
+</p>
+<div class="compare">
+<article><h3>Västergötland</h3><p>Trana</p></article>
+<article><h3>Bohuslän</h3><p>Knubbsäl</p></article>
+<article><h3>Skåne</h3><p>Kronhjort</p></article>
+<article><h3>Dalarna</h3><p>Berguv</p></article>
+<article><h3>Halland</h3><p>Lax</p></article>
+<article><h3>Blekinge</h3><p>Ekoxe</p></article>
+</div>
+<h3>Hästen – ett däggdjur</h3>
+<p>Hästen är ett däggdjur. Hästen äter växter och har tänder som hjälper den att klippa och mala sönder gräs.</p>
+<p>Forskare har undersökt fossil och kommit fram till att hästens släktingar har förändrats under miljontals år.</p>
+<div class="fact">
+Hästens utveckling är ett exempel på förändring över mycket lång tid.
+Dagens hästar har inte alltid sett ut som de gör idag.
+</div>
+<h3>Häst och åsna</h3>
+<p>Om djur av olika arter får en avkomma kallas den en hybrid.</p>
+<p>En mulåsna får en åsnemamma och en hästpappa. En mula får en hästmamma och en åsnepappa.</p>
+<p>Mula och mulåsna kan inte själva få ungar.</p>
+<h3>Sammanfatta det du lärt dig</h3>
+<p>Nu ska du kunna använda dina kunskaper för att sortera djur och förklara varför de tillhör olika grupper.</p>
+`,
+questions:[
+["Vilket är Västergötlands landskapsdjur enligt boken?",["Trana","Berguv","Lax"],0,"Tranan är Västergötlands landskapsdjur."],
+["Vilken djurgrupp tillhör hästen?",["Fiskar","Däggdjur","Kräldjur"],1,"Hästen är ett däggdjur."],
+["Vad betyder hybrid i texten?",["Avkomma från djur av olika arter","Ett djur som lever i vatten","Ett djur utan ryggrad"],0,"En hybrid är avkomma från djur av olika arter."]
+]
+}
+];
+
+const terms = {
+"Ryggrad":"En rad ben som går längs ryggen och är en del av skelettet.",
+"Ryggradsdjur":"Djur som har en ryggrad.",
+"Ryggradslösa djur":"Djur som saknar ryggrad.",
+"Yttre skelett":"Ett hårt skydd på utsidan av kroppen.",
+"Ringmask":"En mask vars kropp är indelad i ringliknande delar.",
+"Nedbrytare":"Organismer som bryter ner döda växter och djur.",
+"Hermafrodit":"En individ som har både hanliga och honliga könsorgan.",
+"Fullständig förvandling":"En utveckling med ägg, larv, puppa och vuxet djur.",
+"Ofullständig förvandling":"En utveckling där nymfen liknar det vuxna djuret.",
+"Nymf":"En ung insekt som liknar den vuxna insekten.",
+"Spinnkörtlar":"Körtlar som tillverkar spindeltråd.",
+"Gälar":"Organ som tar upp syre ur vatten.",
+"Yttre befruktning":"När ägg befruktas utanför honans kropp.",
+"Växelvarm":"När kroppstemperaturen påverkas av omgivningens temperatur.",
+"Reptil":"Ett annat namn för kräldjur.",
+"Revir":"Ett område som ett djur försvarar.",
+"Däggdjur":"Djur vars ungar får mjölk från mamman.",
+"Moderkaka":"Ett organ som ger fostret näring i livmodern.",
+"Hybrid":"Avkomma från djur av olika arter."
+};
+
+let current=0;
+let qIndex=0;
+let score=0;
+let answered=false;
+let trained=new Set();
+
+function renderNav(){
+  const nav=document.getElementById("navigation");
+  nav.innerHTML="";
+  lessons.forEach((l,i)=>{
+    const b=document.createElement("button");
+    b.className="navbtn"+(i===current?" active":"");
+    b.textContent=l.title;
+    b.onclick=()=>showLesson(i);
+    nav.appendChild(b);
+  });
+}
+function showLesson(i){
+  stopSpeech();
+  current=i;
+  renderNav();
+  const l=lessons[i];
+  document.getElementById("stageLabel").textContent=l.stage;
+  document.getElementById("lessonTitle").textContent=l.title;
+  document.getElementById("lessonContent").innerHTML=l.content;
+  document.getElementById("quizPanel").style.display="none";
+  document.getElementById("completion").style.display="none";
+  document.getElementById("lesson").style.display="block";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function speak(){
+  if(!("speechSynthesis" in window)){
+    alert("Uppläsning stöds inte i den här webbläsaren.");
+    return;
+  }
+  stopSpeech();
+  const textContent=document.getElementById("lessonContent").innerText;
+  const utterance=new SpeechSynthesisUtterance(
+    document.getElementById("lessonTitle").innerText+". "+textContent
+  );
+  utterance.lang="sv-SE";
+  utterance.rate=0.85;
+  speechSynthesis.speak(utterance);
+}
+function pauseSpeech(){
+  if(window.speechSynthesis) speechSynthesis.pause();
+}
+function resumeSpeech(){
+  if(window.speechSynthesis) speechSynthesis.resume();
+}
+function stopSpeech(){
+  if(window.speechSynthesis) speechSynthesis.cancel();
+}
+function startQuiz(){
+  stopSpeech();
+  qIndex=0;score=0;answered=false;
+  document.getElementById("lesson").style.display="none";
+  document.getElementById("completion").style.display="none";
+  document.getElementById("quizPanel").style.display="block";
+  document.getElementById("quizTitle").textContent=lessons[current].title;
+  renderQuestion();
+  document.getElementById("quizPanel").scrollIntoView({behavior:"smooth"});
+}
+function renderQuestion(){
+  const questions=lessons[current].questions;
+  const q=questions[qIndex];
+  answered=false;
+  document.getElementById("questionCount").textContent=
+    "Fråga "+(qIndex+1)+" av "+questions.length;
+  document.getElementById("quizProgress").style.width=
+    (qIndex/questions.length*100)+"%";
+  const area=document.getElementById("questionArea");
+  area.innerHTML="";
+  const box=document.createElement("div");
+  box.className="question";
+  const title=document.createElement("h3");
+  title.textContent=q[0];
+  box.appendChild(title);
+  q[1].forEach((option,i)=>{
+    const b=document.createElement("button");
+    b.className="option";
+    b.textContent=String.fromCharCode(65+i)+". "+option;
+    b.onclick=()=>answer(i,b);
+    box.appendChild(b);
+  });
+  const feedback=document.createElement("div");
+  feedback.id="feedback";
+  feedback.className="feedback";
+  box.appendChild(feedback);
+  const next=document.createElement("button");
+  next.id="nextQuestion";
+  next.className="action green";
+  next.textContent=qIndex===questions.length-1?"Visa resultat":"Nästa fråga";
+  next.style.display="none";
+  next.onclick=nextQuestion;
+  box.appendChild(next);
+  area.appendChild(box);
+}
+function answer(i,button){
+  if(answered)return;
+  answered=true;
+  const q=lessons[current].questions[qIndex];
+  const buttons=document.querySelectorAll(".option");
+  buttons.forEach((b,index)=>{
+    b.disabled=true;
+    if(index===q[2])b.classList.add("correct");
+  });
+  const feedback=document.getElementById("feedback");
+  if(i===q[2]){
+    score++;
+    feedback.innerHTML="<strong>Rätt svar!</strong><br>"+q[3];
+    feedback.style.background="#e7f5eb";
+  }else{
+    button.classList.add("wrong");
+    feedback.innerHTML="<strong>Inte riktigt.</strong><br>Rätt svar är: "+
+      q[1][q[2]]+".<br>"+q[3];
+    feedback.style.background="#fff5d9";
+  }
+  feedback.classList.add("show");
+  document.getElementById("nextQuestion").style.display="inline-block";
+}
+function nextQuestion(){
+  qIndex++;
+  if(qIndex<lessons[current].questions.length){
+    renderQuestion();
+  }else{
+    finishQuiz();
+  }
+}
+function finishQuiz(){
+  const total=lessons[current].questions.length;
+  trained.add(current);
+  document.getElementById("quizPanel").style.display="none";
+  document.getElementById("completion").style.display="block";
+  document.getElementById("resultText").textContent=
+    "Du fick "+score+" rätt av "+total+" frågor.";
+  document.getElementById("resultFeedback").textContent=
+    score===total
+    ?"Mycket bra! Du svarade rätt på alla frågor."
+    :score>=2
+    ?"Bra arbetat! Läs förklaringarna och träna igen på frågorna du missade."
+    :"Bra att du tränar. Läs lektionen igen och prova frågorna en gång till.";
+  updateProgress();
+}
+function retryQuiz(){startQuiz()}
+function closeQuiz(){
+  document.getElementById("quizPanel").style.display="none";
+  document.getElementById("lesson").style.display="block";
+}
+function nextLesson(){
+  showLesson((current+1)%lessons.length);
+}
+function updateProgress(){
+  const n=trained.size;
+  document.getElementById("totalProgress").style.width=
+    (n/lessons.length*100)+"%";
+  document.getElementById("progressText").textContent=
+    n+" av "+lessons.length+" områden tränade";
+}
+function renderDictionary(){
+  const area=document.getElementById("dictionary");
+  Object.entries(terms).forEach(([word,definition])=>{
+    const b=document.createElement("button");
+    b.className="option";
+    b.textContent=word;
+    b.onclick=()=>{
+      let existing=b.nextElementSibling;
+      if(existing && existing.classList.contains("definition")){
+        existing.remove();
+      }else{
+        const p=document.createElement("p");
+        p.className="definition fact";
+        p.textContent=definition;
+        b.after(p);
+      }
+    };
+    area.appendChild(b);
+  });
+}
+renderDictionary();
+showLesson(0);
+</script>
+</body>
+</html>
